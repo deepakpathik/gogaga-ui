@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layout/MainLayout';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<div className="p-4">Dashboard Coming Soon</div>} />
+          <Route index element={<Dashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>
