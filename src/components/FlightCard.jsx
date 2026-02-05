@@ -3,7 +3,6 @@ import airIndiaExpressLogo from '../assets/aix.png';
 import indigoLogo from '../assets/indigo_logo.webp';
 import starAirLogo from '../assets/sa_logo.jpeg';
 
-// Helper to get logo based on airline name
 const getAirlineLogo = (airlineName) => {
     if (airlineName.includes('Express')) return airIndiaExpressLogo;
     if (airlineName.includes('Air India')) return airIndiaLogo;

@@ -386,7 +386,7 @@ ul {
     font-size: 0.875rem;
 }
 
-/* Dashboard Styles */
+
 .dashboard-container {
     display: flex;
     flex-direction: column;
@@ -399,12 +399,12 @@ ul {
     justify-content: center;
 }
 
-/* Tabs Styles */
+
 .tabs-container {
     background-color: var(--surface);
     padding: 0.35rem;
     border-radius: 9999px;
-    /* Pill shape */
+
     box-shadow: var(--shadow-sm);
     display: inline-flex;
     border: 1px solid var(--border);
@@ -431,12 +431,12 @@ ul {
 
 .tab-btn.active {
     background-color: var(--primary);
-    /* Black as per logo/theme */
+
     color: white;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
-/* Filters Styles */
+
 .filters-container {
     background-color: var(--surface);
     border-radius: var(--radius-lg);
@@ -524,7 +524,7 @@ ul {
 
 .search-submit-btn {
     background-color: #10b981;
-    /* Greenish */
+
     color: white;
     font-weight: 500;
     padding: 0.6rem 2rem;
@@ -539,9 +539,9 @@ ul {
     background-color: #059669;
 }
 
-/* REFACTORED TABS & FILTERS (Overriding previous styles) */
 
-/* Main Tabs - Primary (Indian/International) */
+
+
 .tabs-container {
     background: transparent;
     border: none;
@@ -569,7 +569,7 @@ ul {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
-/* Sub Tabs (Package with/without Flights) */
+
 .sub-tabs {
     display: flex;
     gap: 2rem;
@@ -598,7 +598,7 @@ ul {
     content: '';
     position: absolute;
     bottom: -1px;
-    /* Align with border-bottom */
+
     left: 0;
     width: 100%;
     height: 3px;
@@ -606,7 +606,7 @@ ul {
     border-radius: 2px 2px 0 0;
 }
 
-/* Filters Layout (Boxy Style) */
+
 .filters-section {
     display: flex;
     flex-direction: column;
@@ -617,7 +617,7 @@ ul {
 .search-row {
     display: flex;
     align-items: flex-end;
-    /* Align inputs and button at bottom */
+
     gap: 1rem;
     width: 100%;
 }
@@ -645,7 +645,7 @@ ul {
     font-size: 0.95rem;
     background-color: var(--surface);
     height: 48px;
-    /* Fixed height for alignment */
+
     display: flex;
     align-items: center;
 }
@@ -676,7 +676,7 @@ ul {
     background-color: #333;
 }
 
-/* Hotel Options Row */
+
 .hotel-options-row {
     display: flex;
     align-items: center;
@@ -747,7 +747,7 @@ ul {
     color: var(--text-secondary);
 }
 
-/* Flight Results Layout */
+
 .flight-results-area {
     display: flex;
     flex-direction: column;
@@ -757,7 +757,7 @@ ul {
 
 .blue-banner {
     background-color: #1e3a8a;
-    /* Dark Blue */
+
     color: white;
     border-radius: var(--radius);
     padding: 1rem 2rem;
@@ -812,7 +812,7 @@ ul {
     overflow: hidden;
 }
 
-/* Flight Section */
+
 .flight-section {
     display: flex;
     flex-direction: column;
@@ -838,7 +838,7 @@ ul {
     display: flex;
     gap: 3rem;
     margin-right: 4rem;
-    /* Approximate spacing to align with card */
+
 }
 
 .flight-list {
@@ -847,7 +847,7 @@ ul {
     gap: 1rem;
 }
 
-/* Flight Card */
+
 .flight-card {
     background-color: var(--surface);
     border-radius: var(--radius);
@@ -938,10 +938,10 @@ ul {
 .stops {
     font-size: 0.65rem;
     color: var(--danger);
-    /* Red for stops/warning */
+
 }
 
-/* Badges Row */
+
 .flight-badges-row {
     display: flex;
     gap: 1rem;
@@ -995,7 +995,7 @@ ul {
     color: #7e22ce;
 }
 
-/* Footer Row */
+
 .flight-footer-row {
     display: flex;
     gap: 1.5rem;
@@ -1016,7 +1016,7 @@ ul {
     height: 0.875rem;
 }
 
-/* Updated Flight Styles */
+
 .airline-logo-img {
     width: 2rem;
     height: 2rem;
@@ -1034,7 +1034,7 @@ ul {
     height: 6px;
     border-radius: 50%;
     margin-top: -3px;
-    /* Center on line */
+
 }
 
 .stops-dot.green {
@@ -1045,7 +1045,7 @@ ul {
     background-color: var(--danger);
 }
 
-/* Updated Tag Colors for new badges */
+
 .tag.xpressbiz {
     background-color: #fce7f3;
     color: #be185d;
@@ -1066,7 +1066,7 @@ ul {
     color: #3f6212;
 }
 
-/* Search Summary (Image 3) */
+
 .search-summary-container {
     background-color: var(--surface);
     border: 1px solid var(--border);
@@ -1138,9 +1138,9 @@ ul {
     height: 1rem;
 }
 
-/* Scrollable Independent Columns */
+
 .flights-grid {
-    /* Allow grid to grow */
+
     height: auto;
 }
 
@@ -1152,7 +1152,7 @@ ul {
     padding-bottom: 2rem;
 }
 
-/* Custom Scrollbar */
+
 .flight-list.scrollable::-webkit-scrollbar {
     width: 6px;
 }
@@ -1170,12 +1170,12 @@ ul {
     background: #94a3b8;
 }
 
-/* Selected Flight Card Style */
+
 .flight-card {
     transition: all 0.2s;
     cursor: pointer;
     border: 2px solid transparent;
-    /* Reserve space */
+
 }
 
 .flight-card.selected {
@@ -1183,11 +1183,11 @@ ul {
     background-color: #eff6ff;
 }
 
-/* Blue Banner Tweaks */
+
 .blue-banner {
     display: grid;
     grid-template-columns: 1.5fr auto 1.5fr auto 2fr;
-    /* 5 Columns */
+
     gap: 1rem;
 }
 
@@ -1215,9 +1215,9 @@ ul {
     align-items: flex-end;
 }
 
-/* Fixing Layout for Sticky Scroll */
+
 .main-content {
-    /* Main content needs to not scroll if we want internal scrolls */
+
     height: 100vh;
     overflow: hidden;
     display: flex;
@@ -1235,7 +1235,7 @@ ul {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    /* Critical for nested flex scrolling */
+
 }
 
 .flight-results-area {
@@ -1267,7 +1267,7 @@ ul {
     overflow-y: auto;
 }
 
-/* Badge Group / Checkbox Styling Refinement */
+
 .badge-group {
     cursor: pointer;
     transition: all 0.2s;

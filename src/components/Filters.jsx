@@ -3,7 +3,6 @@ import { useState } from 'react';
 const Filters = () => {
     return (
         <div className="filters-section">
-            {/* Main Search Row */}
             <div className="search-row">
                 <div className="input-group">
                     <label>Destination</label>
@@ -28,7 +27,6 @@ const Filters = () => {
                 </button>
             </div>
 
-            {/* Hotel Options Row */}
             <div className="hotel-options-row">
                 <div className="option-group">
                     <span className="label">Hotel Standard</span>

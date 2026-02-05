@@ -5,7 +5,6 @@ import FlightSection from '../components/FlightSection';
 
 import SearchSummary from '../components/SearchSummary';
 
-// Mock Data
 const outboundFlights = [
     {
         id: 'out_1', airline: 'Air India Express', flightNo: 'IX 2879 TC', depTime: '12:05', arrTime: '13:30', duration: '01h 25m', stops: 'Non stop',
@@ -54,12 +53,10 @@ const returnFlights = [
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
-    // Pre-select second flight for outbound and second for return as per image (Air India)
     const [selectedOutbound, setSelectedOutbound] = useState(outboundFlights[1]);
     const [selectedReturn, setSelectedReturn] = useState(returnFlights[1]);
 
     const calculateTotal = () => {
-        // Simplified parsing
         const p1 = parseFloat(selectedOutbound.fares[1].price.replace(/,/g, ''));
         const p2 = parseFloat(selectedReturn.fares[1].price.replace(/,/g, ''));
         return (p1 + p2).toLocaleString('en-IN', { minimumFractionDigits: 2 });

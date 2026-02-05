@@ -1,4 +1,4 @@
-import gogagaLogo from '../assets/gogaga_logo.png';
+
 
 const Sidebar = ({ isCollapsed }) => {
     return (
