@@ -1,9 +1,69 @@
 import { useState } from 'react';
 import Tabs from '../components/Tabs';
 import Filters from '../components/Filters';
+import FlightSection from '../components/FlightSection';
+
+import SearchSummary from '../components/SearchSummary';
+
+// Mock Data
+const outboundFlights = [
+    {
+        id: 'out_1', airline: 'Air India Express', flightNo: 'IX 2879 TC', depTime: '12:05', arrTime: '13:30', duration: '01h 25m', stops: 'Non stop',
+        fares: [{ price: "13,300.00", type: "Publish" }, { price: "13,300.00", type: "Flexi" }, { price: "29,144.00", type: "XpressBiz" }]
+    },
+    {
+        id: 'out_2', airline: 'Air India', flightNo: 'AI 2879 TC', depTime: '11:30', arrTime: '18:55', duration: '04h 30m', stops: '1 Stop(s)',
+        fares: [{ price: "13,300.00", type: "SME" }, { price: "105,300.00", type: "Publish" }]
+    },
+    {
+        id: 'out_3', airline: 'Indigo', flightNo: '6E 426 SM', depTime: '20:50', arrTime: '06:20', duration: '09h 30m', stops: '1 Stop(s)',
+        fares: [{ price: "13,300.00", type: "SME" }, { price: "13,300.00", type: "Publish" }]
+    },
+    {
+        id: 'out_4', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 05m', stops: '1 Stop(s)',
+        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
+    },
+    {
+        id: 'out_5', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 05m', stops: '1 Stop(s)',
+        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
+    }
+];
+
+const returnFlights = [
+    {
+        id: 'ret_1', airline: 'Air India Express', flightNo: 'IX 2879 TC', depTime: '12:05', arrTime: '13:30', duration: '01h 25m', stops: 'Non stop',
+        fares: [{ price: "13,300.00", type: "Publish" }, { price: "13,300.00", type: "Flexi" }]
+    },
+    {
+        id: 'ret_2', airline: 'Air India', flightNo: 'AI 2879 TC', depTime: '13:15', arrTime: '06:15', duration: '04h 30m', stops: '2 Stop(s)',
+        fares: [{ price: "13,300.00", type: "SME" }, { price: "105,300.00", type: "Publish" }]
+    },
+    {
+        id: 'ret_3', airline: 'Indigo', flightNo: '6E 426 SM', depTime: '20:50', arrTime: '06:20', duration: '09h 30m', stops: '1 Stop(s)',
+        fares: [{ price: "13,300.00", type: "SME" }, { price: "13,300.00", type: "Publish" }]
+    },
+    {
+        id: 'ret_4', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 25m', stops: '1 Stop(s)',
+        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
+    },
+    {
+        id: 'ret_5', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 25m', stops: '1 Stop(s)',
+        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
+    }
+];
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
+    // Pre-select second flight for outbound and second for return as per image (Air India)
+    const [selectedOutbound, setSelectedOutbound] = useState(outboundFlights[1]);
+    const [selectedReturn, setSelectedReturn] = useState(returnFlights[1]);
+
+    const calculateTotal = () => {
+        // Simplified parsing
+        const p1 = parseFloat(selectedOutbound.fares[1].price.replace(/,/g, ''));
+        const p2 = parseFloat(selectedReturn.fares[1].price.replace(/,/g, ''));
+        return (p1 + p2).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+    };
 
     return (
         <div className="dashboard-container">
@@ -19,9 +79,44 @@ const Dashboard = () => {
             <div className="dashboard-content">
                 <Filters />
 
-                {/* Visual Separator if needed, or Flight Cards next */}
-                <div style={{ marginTop: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                    Displaying {activeTab === 'indian' ? 'Indian' : 'International'} Holidays
+
+                <div className="flight-results-area">
+                    <SearchSummary />
+                    <div className="blue-banner">
+                        <div className="banner-col">
+                            <span className="banner-label">Departure • {selectedOutbound.airline}</span>
+                            <span className="banner-value">{selectedOutbound.depTime} &rarr; {selectedOutbound.arrTime}</span>
+                        </div>
+                        <div className="banner-divider">
+                            <div className="price-tag">₹{selectedOutbound.fares[1].price}</div>
+                        </div>
+                        <div className="banner-col">
+                            <span className="banner-label">Return • {selectedReturn.airline}</span>
+                            <span className="banner-value">{selectedReturn.depTime} &rarr; {selectedReturn.arrTime}</span>
+                        </div>
+                        <div className="banner-divider">
+                            <div className="price-tag">₹{selectedReturn.fares[1].price}</div>
+                        </div>
+                        <div className="banner-col price">
+                            <div className="total-label">for 2 adult, 2 children</div>
+                            <span className="total-fare">Total Round fare <strong>₹{calculateTotal()}</strong></span>
+                        </div>
+                    </div>
+
+                    <div className="flights-grid">
+                        <FlightSection
+                            title="Outbound: Hyderabad(HYD)"
+                            flights={outboundFlights}
+                            selectedFlightId={selectedOutbound.id}
+                            onSelectFlight={setSelectedOutbound}
+                        />
+                        <FlightSection
+                            title="Outbound: Hyderabad(HYD)"
+                            flights={returnFlights}
+                            selectedFlightId={selectedReturn.id}
+                            onSelectFlight={setSelectedReturn}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
