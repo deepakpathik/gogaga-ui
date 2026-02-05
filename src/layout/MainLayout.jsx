@@ -1,11 +1,18 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
 const MainLayout = () => {
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+    const toggleSidebar = () => {
+        setIsSidebarCollapsed(!isSidebarCollapsed);
+    };
+
     return (
-        <div className="layout-container">
+        <div className={`layout-container ${isSidebarCollapsed ? 'collapsed' : ''}`}>
             <div className="sidebar-area">
-                <Sidebar />
+                <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
             </div>
             <main className="main-content">
                 <Outlet />
@@ -13,8 +20,9 @@ const MainLayout = () => {
             <style>{`
         .layout-container {
           display: grid;
-          grid-template-columns: var(--sidebar-width) 1fr;
+          grid-template-columns: ${isSidebarCollapsed ? '80px' : 'var(--sidebar-width)'} 1fr;
           min-height: 100vh;
+          transition: grid-template-columns 0.3s ease;
         }
         .main-content {
           padding: 2rem;
@@ -24,6 +32,7 @@ const MainLayout = () => {
         .sidebar-area {
             border-right: 1px solid var(--border);
             background: var(--surface);
+            overflow: hidden;
         }
       `}</style>
         </div>
