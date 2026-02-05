@@ -5,13 +5,13 @@ const Tabs = ({ activeTab, onTabChange }) => {
         <div className="tabs-container">
             <div className="tabs-wrapper">
                 <button
-                    className={`tab-btn ${activeTab === 'indian' ? 'active' : ''}`}
+                    className={`tab-btn primary ${activeTab === 'indian' ? 'active' : ''}`}
                     onClick={() => onTabChange('indian')}
                 >
                     Indian Holidays
                 </button>
                 <button
-                    className={`tab-btn ${activeTab === 'international' ? 'active' : ''}`}
+                    className={`tab-btn primary ${activeTab === 'international' ? 'active' : ''}`}
                     onClick={() => onTabChange('international')}
                 >
                     International Holidays
