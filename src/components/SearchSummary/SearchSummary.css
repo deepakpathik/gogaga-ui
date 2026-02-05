@@ -1,0 +1,70 @@
+.search-summary-container {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.summary-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.summary-group .label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.summary-group .airport {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.summary-group.from,
+.summary-group.to {
+    flex: 2;
+}
+
+.summary-group.date {
+    flex: 1;
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+}
+
+.date-val {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.exchange-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    background-color: var(--background);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    margin: 0 1rem;
+    border: 1px solid var(--border);
+}
+
+.exchange-icon svg {
+    width: 1rem;
+    height: 1rem;
+}

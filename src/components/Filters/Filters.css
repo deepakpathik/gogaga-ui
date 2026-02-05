@@ -1,0 +1,136 @@
+.filters-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.search-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.input-group label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.input-group input.text-input,
+.input-group .date-input,
+.input-group .passenger-input {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    background-color: var(--surface);
+    height: 48px;
+    display: flex;
+    align-items: center;
+}
+
+.passenger-input {
+    justify-content: space-between;
+}
+
+.passenger-input .icon {
+    width: 1rem;
+    height: 1rem;
+    opacity: 0.5;
+}
+
+.search-btn-black {
+    background-color: black;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.search-btn-black:hover {
+    background-color: #333;
+}
+
+.hotel-options-row {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    margin-top: 0.5rem;
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.option-group .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.star-rating {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.star-btn {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.star-btn .icon.star {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.star-btn.active {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+.checkbox-group {
+    gap: 1.5rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    accent-color: black;
+    width: 1rem;
+    height: 1rem;
+}
+
+.icon.info {
+    width: 1rem;
+    height: 1rem;
+    color: var(--text-secondary);
+}

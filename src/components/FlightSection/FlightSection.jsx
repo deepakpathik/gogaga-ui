@@ -1,4 +1,5 @@
-import FlightCard from './FlightCard';
+import FlightCard from '../FlightCard/FlightCard';
+import './FlightSection.css';
 
 const FlightSection = ({ title, flights, selectedFlightId, selectedFareIndex, onSelectFlight }) => {
     return (

@@ -1,3 +1,5 @@
+import './Sidebar.css';
+
 const Sidebar = ({ isCollapsed }) => {
     return (
         <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>

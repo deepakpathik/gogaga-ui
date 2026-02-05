@@ -1,4 +1,5 @@
-import gogagaLogo from '../assets/gogaga_logo.png';
+import gogagaLogo from '../../assets/gogaga_logo.png';
+import './Topbar.css';
 
 const Topbar = ({ isSidebarCollapsed, toggleSidebar }) => {
     return (

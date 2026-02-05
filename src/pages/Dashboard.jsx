@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Tabs from '../components/Tabs';
-import Filters from '../components/Filters';
-import FlightSection from '../components/FlightSection';
+import Tabs from '../components/Tabs/Tabs';
+import Filters from '../components/Filters/Filters';
+import FlightSection from '../components/FlightSection/FlightSection';
 
-import SearchSummary from '../components/SearchSummary';
+import SearchSummary from '../components/SearchSummary/SearchSummary';
 
 const outboundFlights = [
     {
@@ -121,7 +121,7 @@ const Dashboard = () => {
                             onSelectFlight={handleOutboundSelect}
                         />
                         <FlightSection
-                            title="Outbound: Hyderabad(HYD)"
+                            title="Return: Goa(GOX)"
                             flights={returnFlights}
                             selectedFlightId={selectedReturn.id}
                             selectedFareIndex={selectedReturnFareIndex}

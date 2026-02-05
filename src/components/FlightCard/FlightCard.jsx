@@ -1,7 +1,10 @@
-import airIndiaLogo from '../assets/ai_logo.webp';
-import airIndiaExpressLogo from '../assets/aix.png';
-import indigoLogo from '../assets/indigo_logo.webp';
-import starAirLogo from '../assets/sa_logo.jpeg';
+
+import React from 'react';
+import './FlightCard.css';
+import airIndiaLogo from '../../assets/ai_logo.webp';
+import airIndiaExpressLogo from '../../assets/aix.png';
+import indigoLogo from '../../assets/indigo_logo.webp';
+import starAirLogo from '../../assets/sa_logo.jpeg';
 
 const getAirlineLogo = (airlineName) => {
     if (airlineName.includes('Express')) return airIndiaExpressLogo;
