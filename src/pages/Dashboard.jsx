@@ -53,19 +53,20 @@ const returnFlights = [
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
-    const [selectedOutbound, setSelectedOutbound] = useState(outboundFlights[1]);
-    const [selectedReturn, setSelectedReturn] = useState(returnFlights[1]);
-    const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(1);
-    const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(1);
-
-    const [destination, setDestination] = useState('City');
+    const [destination, setDestination] = useState('');
     const [travelDate, setTravelDate] = useState(new Date());
-    const [passengers, setPassengers] = useState('2 Adults, 2 Children');
+    const [passengers, setPassengers] = useState('');
     const [hotelStandard, setHotelStandard] = useState(5);
     const [addLunch, setAddLunch] = useState(true);
     const [addDinner, setAddDinner] = useState(false);
 
+    const [selectedOutbound, setSelectedOutbound] = useState(null);
+    const [selectedReturn, setSelectedReturn] = useState(null);
+    const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(0);
+    const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(0);
+
     const calculateTotal = () => {
+        if (!selectedOutbound || !selectedReturn) return "0.00";
         const p1 = parseFloat(selectedOutbound.fares[selectedOutboundFareIndex].price.replace(/,/g, ''));
         const p2 = parseFloat(selectedReturn.fares[selectedReturnFareIndex].price.replace(/,/g, ''));
         return (p1 + p2).toLocaleString('en-IN', { minimumFractionDigits: 2 });
@@ -94,6 +95,7 @@ const Dashboard = () => {
 
             <div className="dashboard-content">
                 <Filters
+                    region={activeTab} // 'indian' or 'international'
                     destination={destination}
                     setDestination={setDestination}
                     travelDate={travelDate}
@@ -111,39 +113,46 @@ const Dashboard = () => {
 
                 <div className="flight-results-area">
                     <SearchSummary />
-                    <div className="blue-banner">
-                        <div className="banner-col">
-                            <span className="banner-label">Departure • {selectedOutbound.airline}</span>
-                            <span className="banner-value">{selectedOutbound.depTime} &rarr; {selectedOutbound.arrTime}</span>
+
+                    {selectedOutbound && selectedReturn ? (
+                        <div className="blue-banner">
+                            <div className="banner-col">
+                                <span className="banner-label">Departure • {selectedOutbound.airline}</span>
+                                <span className="banner-value">{selectedOutbound.depTime} &rarr; {selectedOutbound.arrTime}</span>
+                            </div>
+                            <div className="banner-divider">
+                                <div className="price-tag">₹{selectedOutbound.fares[selectedOutboundFareIndex].price}</div>
+                            </div>
+                            <div className="banner-col">
+                                <span className="banner-label">Return • {selectedReturn.airline}</span>
+                                <span className="banner-value">{selectedReturn.depTime} &rarr; {selectedReturn.arrTime}</span>
+                            </div>
+                            <div className="banner-divider">
+                                <div className="price-tag">₹{selectedReturn.fares[selectedReturnFareIndex].price}</div>
+                            </div>
+                            <div className="banner-col price">
+                                <div className="total-label">for {passengers || 'passengers'}</div>
+                                <span className="total-fare">Total Round fare <strong>₹{calculateTotal()}</strong></span>
+                            </div>
                         </div>
-                        <div className="banner-divider">
-                            <div className="price-tag">₹{selectedOutbound.fares[selectedOutboundFareIndex].price}</div>
+                    ) : (
+                        <div className="blue-banner" style={{ justifyContent: 'center', height: 'auto', padding: '1rem' }}>
+                            <span className="banner-value" style={{ fontSize: '1rem' }}>Select an outbound and return flight to view summary</span>
                         </div>
-                        <div className="banner-col">
-                            <span className="banner-label">Return • {selectedReturn.airline}</span>
-                            <span className="banner-value">{selectedReturn.depTime} &rarr; {selectedReturn.arrTime}</span>
-                        </div>
-                        <div className="banner-divider">
-                            <div className="price-tag">₹{selectedReturn.fares[selectedReturnFareIndex].price}</div>
-                        </div>
-                        <div className="banner-col price">
-                            <div className="total-label">for 2 adult, 2 children</div>
-                            <span className="total-fare">Total Round fare <strong>₹{calculateTotal()}</strong></span>
-                        </div>
-                    </div>
+                    )}
 
                     <div className="flights-grid">
                         <FlightSection
                             title="Outbound: Hyderabad(HYD)"
                             flights={outboundFlights}
-                            selectedFlightId={selectedOutbound.id}
+                            selectedFlightId={selectedOutbound?.id}
                             selectedFareIndex={selectedOutboundFareIndex}
                             onSelectFlight={handleOutboundSelect}
                         />
                         <FlightSection
                             title="Outbound: Hyderabad(HYD)"
                             flights={returnFlights}
-                            selectedFlightId={selectedReturn.id}
+                            selectedFlightId={selectedReturn?.id}
                             selectedFareIndex={selectedReturnFareIndex}
                             onSelectFlight={handleReturnSelect}
                         />

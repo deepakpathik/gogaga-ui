@@ -113,6 +113,30 @@
     transition: background-color 0.2s;
 }
 
+.passenger-select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    background-color: var(--surface);
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    padding-right: 2.5rem;
+    /* Make room for the chevron */
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.95rem;
+    height: 48px;
+    color: inherit;
+    font-family: inherit;
+}
+
+/* Ensure chevron is on top of select */
+.passenger-input-wrapper .chevron {
+    pointer-events: none;
+    z-index: 10;
+}
+
 .search-btn-black:hover {
     background-color: #333;
 }

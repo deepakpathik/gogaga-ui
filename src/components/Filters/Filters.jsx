@@ -10,7 +10,8 @@ const Filters = ({
     passengers, setPassengers,
     hotelStandard, setHotelStandard,
     addLunch, setAddLunch,
-    addDinner, setAddDinner
+    addDinner, setAddDinner,
+    region // New prop
 }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [filteredCities, setFilteredCities] = useState([]);
@@ -39,10 +40,22 @@ const Filters = ({
             clearTimeout(debounceTimeout.current);
         }
 
-        if (value.length > 2) {
+        if (value.length > 0) {
             debounceTimeout.current = setTimeout(async () => {
+                console.log("Searching for:", value);
                 const results = await searchCities(value);
-                setFilteredCities(results);
+                console.log("API Results:", results);
+
+                // Filter results based on region
+                const filteredResults = results.filter(city => {
+                    const isIndia = city.includes("India");
+                    return region === 'indian' ? isIndia : !isIndia;
+                });
+
+                console.log("Region:", region);
+                console.log("Filtered Results:", filteredResults);
+
+                setFilteredCities(filteredResults);
             }, 300);
         } else {
             setFilteredCities([]);
@@ -98,12 +111,21 @@ const Filters = ({
                 <div className="input-group">
                     <label>No.of Passengers</label>
                     <div className="passenger-input-wrapper">
-                        <input
-                            type="text"
+                        <select
                             value={passengers}
                             onChange={(e) => setPassengers(e.target.value)}
-                            className="text-input passenger-input"
-                        />
+                            className="text-input passenger-select"
+                        >
+                            <option value="">Select Passengers</option>
+                            <option value="1 Adult">1 Adult</option>
+                            <option value="2 Adults">2 Adults</option>
+                            <option value="2 Adults, 1 Child">2 Adults, 1 Child</option>
+                            <option value="2 Adults, 2 Children">2 Adults, 2 Children</option>
+                            <option value="3 Adults">3 Adults</option>
+                            <option value="3 Adults, 1 Child">3 Adults, 1 Child</option>
+                            <option value="4 Adults">4 Adults</option>
+                            <option value="4 Adults, 2 Children">4 Adults, 2 Children</option>
+                        </select>
                         <svg className="icon chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                 </div>

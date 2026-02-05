@@ -7,19 +7,24 @@ const aviationClient = axios.create({
     }
 });
 
-const TELEPORT_API_URL = 'https://api.teleport.org/api/cities/';
+const MOCK_CITIES = [
+    // India
+    "Hyderabad, India", "Delhi, India", "Mumbai, India", "Bangalore, India", "Chennai, India", "Kolkata, India",
+    "Pune, India", "Jaipur, India", "Goa, India", "Kochi, India", "Ahmedabad, India", "Varanasi, India",
+    // International
+    "Dubai, UAE", "London, UK", "New York, USA", "Singapore, Singapore", "Bangkok, Thailand", "Paris, France",
+    "Tokyo, Japan", "Sydney, Australia", "Bali, Indonesia", "Rome, Italy", "Istanbul, Turkey", "Hong Kong",
+    "Kuala Lumpur, Malaysia", "Barcelona, Spain", "Amsterdam, Netherlands"
+];
 
 export const searchCities = async (query) => {
     if (!query) return [];
-    try {
-        const response = await axios.get(TELEPORT_API_URL, {
-            params: { search: query }
-        });
-        return response.data._embedded['city:search-results'].map(result => result.matching_full_name);
-    } catch (error) {
-        console.error("Error fetching cities:", error);
-        return [];
-    }
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    return MOCK_CITIES.filter(city =>
+        city.toLowerCase().includes(query.toLowerCase())
+    );
 };
 
 export const getRealTimeFlights = async (params = {}) => {
