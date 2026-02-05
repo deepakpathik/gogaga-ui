@@ -5,65 +5,52 @@ import FlightSection from '../components/FlightSection/FlightSection';
 
 import SearchSummary from '../components/SearchSummary/SearchSummary';
 
-const outboundFlights = [
-    {
-        id: 'out_1', airline: 'Air India Express', flightNo: 'IX 2879 TC', depTime: '12:05', arrTime: '13:30', duration: '01h 25m', stops: 'Non stop',
-        fares: [{ price: "13,300.00", type: "Publish" }, { price: "13,300.00", type: "Flexi" }, { price: "29,144.00", type: "XpressBiz" }]
-    },
-    {
-        id: 'out_2', airline: 'Air India', flightNo: 'AI 2879 TC', depTime: '11:30', arrTime: '18:55', duration: '04h 30m', stops: '1 Stop(s)',
-        fares: [{ price: "13,300.00", type: "SME" }, { price: "105,300.00", type: "Publish" }]
-    },
-    {
-        id: 'out_3', airline: 'Indigo', flightNo: '6E 426 SM', depTime: '20:50', arrTime: '06:20', duration: '09h 30m', stops: '1 Stop(s)',
-        fares: [{ price: "13,300.00", type: "SME" }, { price: "13,300.00", type: "Publish" }]
-    },
-    {
-        id: 'out_4', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 05m', stops: '1 Stop(s)',
-        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
-    },
-    {
-        id: 'out_5', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 05m', stops: '1 Stop(s)',
-        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
-    }
-];
 
-const returnFlights = [
-    {
-        id: 'ret_1', airline: 'Air India Express', flightNo: 'IX 2879 TC', depTime: '12:05', arrTime: '13:30', duration: '01h 25m', stops: 'Non stop',
-        fares: [{ price: "13,300.00", type: "Publish" }, { price: "13,300.00", type: "Flexi" }]
-    },
-    {
-        id: 'ret_2', airline: 'Air India', flightNo: 'AI 2879 TC', depTime: '13:15', arrTime: '06:15', duration: '04h 30m', stops: '2 Stop(s)',
-        fares: [{ price: "13,300.00", type: "SME" }, { price: "105,300.00", type: "Publish" }]
-    },
-    {
-        id: 'ret_3', airline: 'Indigo', flightNo: '6E 426 SM', depTime: '20:50', arrTime: '06:20', duration: '09h 30m', stops: '1 Stop(s)',
-        fares: [{ price: "13,300.00", type: "SME" }, { price: "13,300.00", type: "Publish" }]
-    },
-    {
-        id: 'ret_4', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 25m', stops: '1 Stop(s)',
-        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
-    },
-    {
-        id: 'ret_5', airline: 'Star Air', flightNo: 'S5 212 TQ2', depTime: '09:50', arrTime: '17:55', duration: '08h 25m', stops: '1 Stop(s)',
-        fares: [{ price: "13,300.00", type: "Regular" }, { price: "13,300.00", type: "Flexi" }]
-    }
-];
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
     const [destination, setDestination] = useState('');
+    const [origin, setOrigin] = useState('Hyderabad, India (HYD)'); // Default origin
     const [travelDate, setTravelDate] = useState(new Date());
+    const [returnDate, setReturnDate] = useState(new Date(new Date().setDate(new Date().getDate() + 5))); // Default return +5 days
     const [passengers, setPassengers] = useState('');
     const [hotelStandard, setHotelStandard] = useState(5);
     const [addLunch, setAddLunch] = useState(true);
     const [addDinner, setAddDinner] = useState(false);
 
+    const [outboundData, setOutboundData] = useState(null);
+    const [returnData, setReturnData] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     const [selectedOutbound, setSelectedOutbound] = useState(null);
     const [selectedReturn, setSelectedReturn] = useState(null);
     const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(0);
     const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(0);
+
+    const handleSearch = async () => {
+        if (!destination) {
+            alert("Please select a destination");
+            return;
+        }
+        setLoading(true);
+        // Reset selections
+        setSelectedOutbound(null);
+        setSelectedReturn(null);
+
+        try {
+            const { getRealTimeFlights } = await import('../services/api');
+            const data = await getRealTimeFlights({ origin, destination });
+
+            if (data) {
+                setOutboundData(data.outbound);
+                setReturnData(data.return);
+            }
+        } catch (error) {
+            console.error("Search failed", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const calculateTotal = () => {
         if (!selectedOutbound || !selectedReturn) return "0.00";
@@ -95,11 +82,15 @@ const Dashboard = () => {
 
             <div className="dashboard-content">
                 <Filters
-                    region={activeTab} // 'indian' or 'international'
+                    region={activeTab}
+                    origin={origin}
+                    setOrigin={setOrigin}
                     destination={destination}
                     setDestination={setDestination}
                     travelDate={travelDate}
                     setTravelDate={setTravelDate}
+                    returnDate={returnDate}
+                    setReturnDate={setReturnDate}
                     passengers={passengers}
                     setPassengers={setPassengers}
                     hotelStandard={hotelStandard}
@@ -108,11 +99,17 @@ const Dashboard = () => {
                     setAddLunch={setAddLunch}
                     addDinner={addDinner}
                     setAddDinner={setAddDinner}
+                    onSearch={handleSearch}
                 />
 
 
                 <div className="flight-results-area">
-                    <SearchSummary />
+                    <SearchSummary
+                        origin={origin || "Select Origin"}
+                        destination={destination || "Select Destination"}
+                        departDate={travelDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                        returnDate={returnDate ? returnDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : '-'}
+                    />
 
                     {selectedOutbound && selectedReturn ? (
                         <div className="blue-banner">
@@ -142,20 +139,33 @@ const Dashboard = () => {
                     )}
 
                     <div className="flights-grid">
-                        <FlightSection
-                            title="Outbound: Hyderabad(HYD)"
-                            flights={outboundFlights}
-                            selectedFlightId={selectedOutbound?.id}
-                            selectedFareIndex={selectedOutboundFareIndex}
-                            onSelectFlight={handleOutboundSelect}
-                        />
-                        <FlightSection
-                            title="Outbound: Hyderabad(HYD)"
-                            flights={returnFlights}
-                            selectedFlightId={selectedReturn?.id}
-                            selectedFareIndex={selectedReturnFareIndex}
-                            onSelectFlight={handleReturnSelect}
-                        />
+                        {loading && <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '2rem' }}>Loading flights...</div>}
+
+                        {!loading && outboundData && outboundData.length === 0 && (
+                            <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '2rem', color: 'var(--text-secondary)' }}>
+                                No flights found for this route. Try a different date or destination.
+                            </div>
+                        )}
+
+                        {!loading && outboundData && outboundData.length > 0 && (
+                            <FlightSection
+                                title={`Outbound: Hyderabad(HYD) -> ${destination.split(',')[0]}`}
+                                flights={outboundData}
+                                selectedFlightId={selectedOutbound?.id}
+                                selectedFareIndex={selectedOutboundFareIndex}
+                                onSelectFlight={handleOutboundSelect}
+                            />
+                        )}
+
+                        {!loading && returnData && returnData.length > 0 && (
+                            <FlightSection
+                                title={`Return: ${destination.split(',')[0]} -> Hyderabad(HYD)`}
+                                flights={returnData}
+                                selectedFlightId={selectedReturn?.id}
+                                selectedFareIndex={selectedReturnFareIndex}
+                                onSelectFlight={handleReturnSelect}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

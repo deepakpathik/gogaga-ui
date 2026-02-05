@@ -11,7 +11,8 @@ const Filters = ({
     hotelStandard, setHotelStandard,
     addLunch, setAddLunch,
     addDinner, setAddDinner,
-    region // New prop
+    onSearch,
+    region
 }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [filteredCities, setFilteredCities] = useState([]);
@@ -42,19 +43,11 @@ const Filters = ({
 
         if (value.length > 0) {
             debounceTimeout.current = setTimeout(async () => {
-                console.log("Searching for:", value);
                 const results = await searchCities(value);
-                console.log("API Results:", results);
-
-                // Filter results based on region
                 const filteredResults = results.filter(city => {
                     const isIndia = city.includes("India");
                     return region === 'indian' ? isIndia : !isIndia;
                 });
-
-                console.log("Region:", region);
-                console.log("Filtered Results:", filteredResults);
-
                 setFilteredCities(filteredResults);
             }, 300);
         } else {
@@ -130,7 +123,7 @@ const Filters = ({
                     </div>
                 </div>
 
-                <button className="search-btn-black">
+                <button className="search-btn-black" onClick={onSearch}>
                     <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </button>
             </div>
