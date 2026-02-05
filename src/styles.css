@@ -111,22 +111,51 @@ ul {
     width: 100%;
 }
 
-/* Sidebar Styles */
-.sidebar {
-    height: 100vh;
-    width: 100%;
-    background-color: var(--surface);
-    border-right: 1px solid var(--border);
+.app-container {
     display: flex;
     flex-direction: column;
-    position: relative;
-    z-index: 10;
-    overflow-y: hidden;
+    height: 100vh;
+}
+
+.main-body {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    flex: 1;
+    overflow: hidden;
+    transition: grid-template-columns 0.3s ease;
+}
+
+.main-body.collapsed {
+    grid-template-columns: 80px 1fr;
+}
+
+.main-content {
+    padding: 2rem;
+    background-color: var(--background);
+    overflow-y: auto;
+}
+
+.sidebar-area {
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+}
+
+.sidebar {
+    height: 100%;
+    width: 100%;
+    background-color: var(--surface);
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar.collapsed .nav-item {
     justify-content: center;
     padding: 0.65rem;
+}
+
+.sidebar.collapsed .nav-item span {
+    display: none;
 }
 
 .sidebar-header {
@@ -168,9 +197,9 @@ ul {
 }
 
 .sidebar-content {
-    flex: 1;
-    overflow-y: auto;
     padding-top: 1rem;
+    overflow-y: auto;
+    flex: 1;
 }
 
 .sidebar-section {
@@ -232,7 +261,6 @@ ul {
     font-weight: 500;
 }
 
-/* Topbar Styles */
 .topbar {
     height: var(--header-height);
     background-color: var(--surface);
@@ -240,13 +268,41 @@ ul {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2rem;
-    width: 100%;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 20;
 }
 
-.topbar-title {
-    font-weight: 600;
-    font-size: 1.125rem;
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.brand-logo {
+    height: 32px;
+    width: auto;
+}
+
+.sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    transition: background-color 0.2s;
+}
+
+.sidebar-toggle-btn:hover {
+    background-color: var(--background);
+    color: var(--primary);
 }
 
 .topbar-right {
@@ -255,51 +311,76 @@ ul {
     gap: 1.5rem;
 }
 
+.notification-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .icon-btn {
-    padding: 0.5rem;
-    border-radius: 50%;
-    color: var(--text-secondary);
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    position: relative;
 }
 
 .icon-btn:hover {
     background-color: var(--background);
-    color: var(--text);
 }
 
-.profile-menu {
+.icon-btn .icon {
+    width: 1.35rem;
+    height: 1.35rem;
+    color: var(--secondary);
+}
+
+.badge-dot {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: var(--danger);
+    color: white;
+    font-size: 0.65rem;
+    padding: 0 4px;
+    border-radius: 4px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: unset;
+}
+
+.badge-dot.cyan {
+    background-color: #10b981;
+}
+
+.badge-dot.blue {
+    background-color: #3b82f6;
+}
+
+.badge-dot.red {
+    background-color: #ef4444;
+}
+
+.user-profile {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     cursor: pointer;
-    padding: 0.25rem;
-    border-radius: var(--radius);
-    transition: background-color 0.2s;
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
 }
 
-.profile-menu:hover {
-    background-color: var(--background);
-}
-
-.profile-img {
-    width: 2rem;
-    height: 2rem;
+.user-profile .avatar-placeholder img {
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
-    object-fit: cover;
-    background-color: #e2e8f0;
 }
 
-.profile-info {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.875rem;
-    line-height: 1.25;
-}
-
-.profile-name {
+.user-profile .username {
     font-weight: 500;
-    color: var(--text);
+    font-size: 0.875rem;
 }
