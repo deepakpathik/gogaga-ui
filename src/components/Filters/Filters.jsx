@@ -1,5 +1,7 @@
+import { useState, useEffect, useRef } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { searchCities } from '../../services/api';
 import './Filters.css';
 
 const Filters = ({
@@ -10,18 +12,72 @@ const Filters = ({
     addLunch, setAddLunch,
     addDinner, setAddDinner
 }) => {
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [filteredCities, setFilteredCities] = useState([]);
+    const dropdownRef = useRef(null);
+    const debounceTimeout = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const handleCityChange = (e) => {
+        const value = e.target.value;
+        setDestination(value);
+        setShowDropdown(true);
+
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        if (value.length > 2) {
+            debounceTimeout.current = setTimeout(async () => {
+                const results = await searchCities(value);
+                setFilteredCities(results);
+            }, 300);
+        } else {
+            setFilteredCities([]);
+        }
+    };
+
+    const selectCity = (city) => {
+        setDestination(city);
+        setShowDropdown(false);
+    };
+
     return (
         <div className="filters-section">
             <div className="search-row">
-                <div className="input-group">
+                <div className="input-group" ref={dropdownRef}>
                     <label>Destination</label>
-                    <input
-                        type="text"
-                        placeholder="City"
-                        value={destination}
-                        onChange={(e) => setDestination(e.target.value)}
-                        className="text-input"
-                    />
+                    <div className="autocomplete-wrapper">
+                        <input
+                            type="text"
+                            placeholder="City"
+                            value={destination}
+                            onChange={handleCityChange}
+                            onFocus={() => destination && setShowDropdown(true)}
+                            className="text-input"
+                        />
+                        {showDropdown && filteredCities.length > 0 && (
+                            <ul className="city-dropdown">
+                                {filteredCities.map((city, index) => (
+                                    <li key={index} onClick={() => selectCity(city)}>
+                                        {city}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 </div>
 
                 <div className="input-group">

@@ -70,6 +70,37 @@
     width: 100%;
 }
 
+.autocomplete-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.city-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 50;
+    margin-top: 4px;
+}
+
+.city-dropdown li {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.city-dropdown li:hover {
+    background-color: var(--background);
+}
+
 .search-btn-black {
     background-color: black;
     color: white;

@@ -58,7 +58,6 @@ const Dashboard = () => {
     const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(1);
     const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(1);
 
-    // Filter States
     const [destination, setDestination] = useState('City');
     const [travelDate, setTravelDate] = useState(new Date());
     const [passengers, setPassengers] = useState('2 Adults, 2 Children');
