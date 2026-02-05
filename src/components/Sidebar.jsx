@@ -1,5 +1,3 @@
-
-
 const Sidebar = ({ isCollapsed }) => {
     return (
         <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>

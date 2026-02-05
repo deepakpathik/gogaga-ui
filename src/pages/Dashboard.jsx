@@ -53,7 +53,6 @@ const returnFlights = [
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
-    // Pre-select second flight for outbound and second for return as per image (Air India)
     const [selectedOutbound, setSelectedOutbound] = useState(outboundFlights[1]);
     const [selectedReturn, setSelectedReturn] = useState(returnFlights[1]);
     const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(1);

@@ -18,7 +18,7 @@ const FlightSection = ({ title, flights, selectedFlightId, selectedFareIndex, on
                         key={flight.id}
                         {...flight}
                         selected={selectedFlightId === flight.id}
-                        selectedFareIndex={selectedFlightId === flight.id ? selectedFareIndex : 0} // Default to 0 for unselected
+                        selectedFareIndex={selectedFlightId === flight.id ? selectedFareIndex : 0}
                         onSelect={(fareIndex) => onSelectFlight(flight, fareIndex)}
                     />
                 ))}

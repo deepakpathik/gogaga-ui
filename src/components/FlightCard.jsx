@@ -17,7 +17,7 @@ const FlightCard = ({ airline, flightNo, depTime, arrTime, duration, stops, fare
     return (
         <div
             className={`flight-card ${selected ? 'selected' : ''}`}
-            onClick={() => onSelect(0)} // Default to first index if card clicked directly, or maybe preserve? Let's use 0 or current if kept. Simple select = 0.
+            onClick={() => onSelect(0)}
         >
             <div className="flight-main-row">
                 <div className="airline-info">
@@ -53,7 +53,7 @@ const FlightCard = ({ airline, flightNo, depTime, arrTime, duration, stops, fare
                         className={`badge-group ${selected && index === selectedFareIndex ? 'active' : ''}`}
                         key={index}
                         onClick={(e) => {
-                            e.stopPropagation(); // Prevent card click
+                            e.stopPropagation();
                             onSelect(index);
                         }}
                     >
@@ -61,7 +61,7 @@ const FlightCard = ({ airline, flightNo, depTime, arrTime, duration, stops, fare
                             <input
                                 type="checkbox"
                                 checked={selected && index === selectedFareIndex}
-                                readOnly // Controlled by parent
+                                readOnly
                             />
                         </div>
                         <span className="price">₹ {fare.price}</span>
