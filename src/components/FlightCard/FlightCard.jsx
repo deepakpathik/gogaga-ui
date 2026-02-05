@@ -1,5 +1,3 @@
-
-import React from 'react';
 import './FlightCard.css';
 import airIndiaLogo from '../../assets/ai_logo.webp';
 import airIndiaExpressLogo from '../../assets/aix.png';

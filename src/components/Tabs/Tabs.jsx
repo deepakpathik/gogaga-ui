@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './Tabs.css';
 
 const Tabs = ({ activeTab, onTabChange }) => {
