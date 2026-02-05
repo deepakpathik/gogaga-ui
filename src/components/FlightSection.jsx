@@ -1,6 +1,6 @@
 import FlightCard from './FlightCard';
 
-const FlightSection = ({ title, flights, selectedFlightId, onSelectFlight }) => {
+const FlightSection = ({ title, flights, selectedFlightId, selectedFareIndex, onSelectFlight }) => {
     return (
         <div className="flight-section">
             <div className="section-header">
@@ -18,7 +18,8 @@ const FlightSection = ({ title, flights, selectedFlightId, onSelectFlight }) => 
                         key={flight.id}
                         {...flight}
                         selected={selectedFlightId === flight.id}
-                        onSelect={() => onSelectFlight(flight)}
+                        selectedFareIndex={selectedFlightId === flight.id ? selectedFareIndex : 0} // Default to 0 for unselected
+                        onSelect={(fareIndex) => onSelectFlight(flight, fareIndex)}
                     />
                 ))}
             </div>

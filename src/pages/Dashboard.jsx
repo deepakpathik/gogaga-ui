@@ -53,14 +53,27 @@ const returnFlights = [
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
+    // Pre-select second flight for outbound and second for return as per image (Air India)
     const [selectedOutbound, setSelectedOutbound] = useState(outboundFlights[1]);
     const [selectedReturn, setSelectedReturn] = useState(returnFlights[1]);
+    const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(1);
+    const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(1);
 
     const calculateTotal = () => {
-        const p1 = parseFloat(selectedOutbound.fares[1].price.replace(/,/g, ''));
-        const p2 = parseFloat(selectedReturn.fares[1].price.replace(/,/g, ''));
+        const p1 = parseFloat(selectedOutbound.fares[selectedOutboundFareIndex].price.replace(/,/g, ''));
+        const p2 = parseFloat(selectedReturn.fares[selectedReturnFareIndex].price.replace(/,/g, ''));
         return (p1 + p2).toLocaleString('en-IN', { minimumFractionDigits: 2 });
     };
+
+    const handleOutboundSelect = (flight, fareIndex = 0) => {
+        setSelectedOutbound(flight);
+        setSelectedOutboundFareIndex(fareIndex);
+    }
+
+    const handleReturnSelect = (flight, fareIndex = 0) => {
+        setSelectedReturn(flight);
+        setSelectedReturnFareIndex(fareIndex);
+    }
 
     return (
         <div className="dashboard-container">
@@ -85,14 +98,14 @@ const Dashboard = () => {
                             <span className="banner-value">{selectedOutbound.depTime} &rarr; {selectedOutbound.arrTime}</span>
                         </div>
                         <div className="banner-divider">
-                            <div className="price-tag">₹{selectedOutbound.fares[1].price}</div>
+                            <div className="price-tag">₹{selectedOutbound.fares[selectedOutboundFareIndex].price}</div>
                         </div>
                         <div className="banner-col">
                             <span className="banner-label">Return • {selectedReturn.airline}</span>
                             <span className="banner-value">{selectedReturn.depTime} &rarr; {selectedReturn.arrTime}</span>
                         </div>
                         <div className="banner-divider">
-                            <div className="price-tag">₹{selectedReturn.fares[1].price}</div>
+                            <div className="price-tag">₹{selectedReturn.fares[selectedReturnFareIndex].price}</div>
                         </div>
                         <div className="banner-col price">
                             <div className="total-label">for 2 adult, 2 children</div>
@@ -105,13 +118,15 @@ const Dashboard = () => {
                             title="Outbound: Hyderabad(HYD)"
                             flights={outboundFlights}
                             selectedFlightId={selectedOutbound.id}
-                            onSelectFlight={setSelectedOutbound}
+                            selectedFareIndex={selectedOutboundFareIndex}
+                            onSelectFlight={handleOutboundSelect}
                         />
                         <FlightSection
                             title="Outbound: Hyderabad(HYD)"
                             flights={returnFlights}
                             selectedFlightId={selectedReturn.id}
-                            onSelectFlight={setSelectedReturn}
+                            selectedFareIndex={selectedReturnFareIndex}
+                            onSelectFlight={handleReturnSelect}
                         />
                     </div>
                 </div>
