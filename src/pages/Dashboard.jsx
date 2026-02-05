@@ -121,7 +121,7 @@ const Dashboard = () => {
                             onSelectFlight={handleOutboundSelect}
                         />
                         <FlightSection
-                            title="Return: Goa(GOX)"
+                            title="Outbound: Hyderabad(HYD)"
                             flights={returnFlights}
                             selectedFlightId={selectedReturn.id}
                             selectedFareIndex={selectedReturnFareIndex}
