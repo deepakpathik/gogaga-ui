@@ -58,6 +58,14 @@ const Dashboard = () => {
     const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(1);
     const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(1);
 
+    // Filter States
+    const [destination, setDestination] = useState('City');
+    const [travelDate, setTravelDate] = useState(new Date());
+    const [passengers, setPassengers] = useState('2 Adults, 2 Children');
+    const [hotelStandard, setHotelStandard] = useState(5);
+    const [addLunch, setAddLunch] = useState(true);
+    const [addDinner, setAddDinner] = useState(false);
+
     const calculateTotal = () => {
         const p1 = parseFloat(selectedOutbound.fares[selectedOutboundFareIndex].price.replace(/,/g, ''));
         const p2 = parseFloat(selectedReturn.fares[selectedReturnFareIndex].price.replace(/,/g, ''));
@@ -86,7 +94,20 @@ const Dashboard = () => {
             </div>
 
             <div className="dashboard-content">
-                <Filters />
+                <Filters
+                    destination={destination}
+                    setDestination={setDestination}
+                    travelDate={travelDate}
+                    setTravelDate={setTravelDate}
+                    passengers={passengers}
+                    setPassengers={setPassengers}
+                    hotelStandard={hotelStandard}
+                    setHotelStandard={setHotelStandard}
+                    addLunch={addLunch}
+                    setAddLunch={setAddLunch}
+                    addDinner={addDinner}
+                    setAddDinner={setAddDinner}
+                />
 
 
                 <div className="flight-results-area">
