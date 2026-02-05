@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar/Sidebar';
 import Topbar from '../components/Topbar/Topbar';
 
 const MainLayout = () => {
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(window.innerWidth < 768);
 
     const toggleSidebar = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -18,6 +18,10 @@ const MainLayout = () => {
                 <div className="sidebar-area">
                     <Sidebar isCollapsed={isSidebarCollapsed} />
                 </div>
+                
+                {!isSidebarCollapsed && (
+                    <div className="sidebar-overlay" onClick={() => setIsSidebarCollapsed(true)}></div>
+                )}
                 <main className="main-content">
                     <Outlet />
                 </main>

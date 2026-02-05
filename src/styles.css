@@ -429,3 +429,96 @@ ul {
     overflow: hidden;
     padding-bottom: 2rem;
 }
+
+.sidebar-overlay {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .main-body {
+        grid-template-columns: 200px 1fr;
+    }
+
+    .flights-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .blue-banner {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .banner-divider {
+        display: none;
+    }
+
+    .banner-col {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-body {
+        grid-template-columns: 1fr;
+    }
+
+    .main-body.collapsed {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar-area {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        bottom: 0;
+        z-index: 50;
+        width: var(--sidebar-width);
+        transform: translateX(0);
+        transition: transform 0.3s ease-in-out;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* When collapsed on desktop it's mini, on mobile it's hidden */
+    .main-body.collapsed .sidebar-area {
+        transform: translateX(-100%);
+        width: var(--sidebar-width);
+        /* Enhance transition */
+    }
+
+    /* Overlay when sidebar is open */
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        cursor: pointer;
+    }
+
+    /* Adjust flight grid for mobile */
+    .flights-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .blue-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .banner-divider {
+        display: none;
+    }
+
+    .filters-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filters-group {
+        justify-content: space-between;
+    }
+}

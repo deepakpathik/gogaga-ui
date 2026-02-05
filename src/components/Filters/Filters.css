@@ -134,3 +134,49 @@
     height: 1rem;
     color: var(--text-secondary);
 }
+
+@media (max-width: 1024px) {
+    .search-row {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .hotel-options-row {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-group {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .search-btn-black {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .hotel-options-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .option-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .checkbox-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}

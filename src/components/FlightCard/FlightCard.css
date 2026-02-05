@@ -230,3 +230,56 @@
     width: 0.875rem;
     height: 0.875rem;
 }
+
+@media (max-width: 768px) {
+    .flight-card {
+        min-height: auto;
+        gap: 1rem;
+    }
+
+    .flight-main-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .airline-info {
+        width: 100%;
+    }
+
+    .flight-time-group {
+        align-items: flex-start;
+    }
+
+    .flight-duration-group {
+        align-items: flex-start;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .duration-line {
+        width: 50px;
+        justify-content: flex-start;
+    }
+
+    .stops-dot {
+        margin-left: 0;
+    }
+
+    .flight-badges-row {
+        flex-wrap: wrap;
+        height: auto;
+        overflow-x: visible;
+        gap: 0.75rem;
+    }
+
+    .badge-group {
+        min-width: calc(50% - 0.5rem);
+        flex: unset;
+    }
+
+    .flight-footer-row {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}
