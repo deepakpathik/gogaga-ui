@@ -84,7 +84,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
     z-index: 50;
     margin-top: 4px;
@@ -100,6 +100,63 @@
 .city-dropdown li:hover {
     background-color: var(--background);
 }
+
+/* New styles for Airport autocomplete */
+.city-dropdown li.airport-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-light, #f0f0f0);
+}
+
+.city-dropdown li.airport-item:last-child {
+    border-bottom: none;
+}
+
+.airport-main {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.airport-code {
+    font-weight: 700;
+    background-color: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.airport-name {
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.airport-sub {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-left: 0;
+}
+
+/* End of new styles */
+
+.city-dropdown li.message {
+    cursor: default;
+    color: var(--text-secondary);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+.city-dropdown li.message:hover {
+    background-color: transparent;
+}
+
 
 .search-btn-black {
     background-color: black;

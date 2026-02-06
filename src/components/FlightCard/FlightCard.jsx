@@ -3,12 +3,16 @@ import airIndiaLogo from '../../assets/ai_logo.webp';
 import airIndiaExpressLogo from '../../assets/aix.png';
 import indigoLogo from '../../assets/indigo_logo.webp';
 import starAirLogo from '../../assets/sa_logo.jpeg';
+import spiceJetLogo from '../../assets/SG.svg';
+import vistaraLogo from '../../assets/vistara.png';
 
 const getAirlineLogo = (airlineName) => {
     if (airlineName.includes('Express')) return airIndiaExpressLogo;
     if (airlineName.includes('Air India')) return airIndiaLogo;
-    if (airlineName.includes('Indigo')) return indigoLogo;
+    if (airlineName.toLowerCase().includes('indigo')) return indigoLogo;
     if (airlineName.includes('Star')) return starAirLogo;
+    if (airlineName.includes('SpiceJet')) return spiceJetLogo;
+    if (airlineName.includes('Vistara')) return vistaraLogo;
     return null;
 };
 

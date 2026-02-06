@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { searchCities } from '../../services/api';
+import { searchAirportsByCity } from '../../services/api'; // Updated import
 import './Filters.css';
 
 const Filters = ({
     destination, setDestination,
     travelDate, setTravelDate,
+    returnDate, setReturnDate,
     passengers, setPassengers,
     hotelStandard, setHotelStandard,
     addLunch, setAddLunch,
@@ -15,7 +16,9 @@ const Filters = ({
     region
 }) => {
     const [showDropdown, setShowDropdown] = useState(false);
-    const [filteredCities, setFilteredCities] = useState([]);
+    const [filteredAirports, setFilteredAirports] = useState([]); // Renamed from filteredCities
+    const [isLoading, setIsLoading] = useState(false);
+
     const dropdownRef = useRef(null);
     const debounceTimeout = useRef(null);
 
@@ -37,26 +40,34 @@ const Filters = ({
         setDestination(value);
         setShowDropdown(true);
 
-        if (debounceTimeout.current) {
-            clearTimeout(debounceTimeout.current);
-        }
+        if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
-        if (value.length > 0) {
+        if (value.length >= 2) { // Start searching after 2 chars
+            setIsLoading(true);
             debounceTimeout.current = setTimeout(async () => {
-                const results = await searchCities(value);
-                const filteredResults = results.filter(city => {
-                    const isIndia = city.includes("India");
-                    return region === 'indian' ? isIndia : !isIndia;
-                });
-                setFilteredCities(filteredResults);
-            }, 300);
+                try {
+                    const results = await searchAirportsByCity(value);
+                    setFilteredAirports(results);
+                } catch (err) {
+                    console.error("Airport search error", err);
+                    setFilteredAirports([]);
+                } finally {
+                    setIsLoading(false);
+                }
+            }, 600); // 600ms debounce
         } else {
-            setFilteredCities([]);
+            setFilteredAirports([]);
+            setIsLoading(false);
         }
     };
 
-    const selectCity = (city) => {
-        setDestination(city);
+    const selectAirport = (airportData) => {
+        // format: "City (IATA)" or just "IATA" depending on preference, 
+        // but prompt says "store IATA code". 
+        // User visual might need to be friendly.
+        // Let's store "City (IATA)" in the input for readability, but internally it's the IATA.
+        // Since `destination` is a string state passed from parent, we update that.
+        setDestination(airportData.label);
         setShowDropdown(false);
     };
 
@@ -68,19 +79,31 @@ const Filters = ({
                     <div className="autocomplete-wrapper">
                         <input
                             type="text"
-                            placeholder="City"
+                            placeholder="Destination City"
                             value={destination}
                             onChange={handleCityChange}
                             onFocus={() => destination && setShowDropdown(true)}
                             className="text-input"
                         />
-                        {showDropdown && filteredCities.length > 0 && (
+                        {showDropdown && (
                             <ul className="city-dropdown">
-                                {filteredCities.map((city, index) => (
-                                    <li key={index} onClick={() => selectCity(city)}>
-                                        {city}
-                                    </li>
-                                ))}
+                                {isLoading ? (
+                                    <li className="message">Looking for airports...</li>
+                                ) : filteredAirports.length > 0 ? (
+                                    filteredAirports.map((airportData, index) => (
+                                        <li key={index} onClick={() => selectAirport(airportData)} className="airport-item">
+                                            <div className="airport-main">
+                                                <span className="airport-code">{airportData.value}</span>
+                                                <span className="airport-name">{airportData.name}</span>
+                                            </div>
+                                            <div className="airport-sub">
+                                                {airportData.city}, {airportData.country}
+                                            </div>
+                                        </li>
+                                    ))
+                                ) : destination.length >= 2 ? (
+                                    <li className="message">No airports found nearby</li>
+                                ) : null}
                             </ul>
                         )}
                     </div>
@@ -101,23 +124,22 @@ const Filters = ({
                     </div>
                 </div>
 
+
+
                 <div className="input-group">
-                    <label>No.of Passengers</label>
+                    <label>Passengers</label>
                     <div className="passenger-input-wrapper">
                         <select
                             value={passengers}
                             onChange={(e) => setPassengers(e.target.value)}
                             className="text-input passenger-select"
                         >
-                            <option value="">Select Passengers</option>
+                            <option value="">Select</option>
                             <option value="1 Adult">1 Adult</option>
                             <option value="2 Adults">2 Adults</option>
                             <option value="2 Adults, 1 Child">2 Adults, 1 Child</option>
-                            <option value="2 Adults, 2 Children">2 Adults, 2 Children</option>
                             <option value="3 Adults">3 Adults</option>
-                            <option value="3 Adults, 1 Child">3 Adults, 1 Child</option>
                             <option value="4 Adults">4 Adults</option>
-                            <option value="4 Adults, 2 Children">4 Adults, 2 Children</option>
                         </select>
                         <svg className="icon chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
@@ -171,3 +193,5 @@ const Filters = ({
 };
 
 export default Filters;
+
+

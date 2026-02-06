@@ -10,7 +10,8 @@ import SearchSummary from '../components/SearchSummary/SearchSummary';
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
     const [destination, setDestination] = useState('');
-    const [origin, setOrigin] = useState('Hyderabad, India (HYD)'); // Default origin
+    const [destinationAirport, setDestinationAirport] = useState(''); // Synced airport for SearchSummary
+    const [origin, setOrigin] = useState(''); // Default origin
     const [travelDate, setTravelDate] = useState(new Date());
     const [returnDate, setReturnDate] = useState(new Date(new Date().setDate(new Date().getDate() + 5))); // Default return +5 days
     const [passengers, setPassengers] = useState('');
@@ -27,6 +28,26 @@ const Dashboard = () => {
     const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(0);
     const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(0);
 
+    const handleDestinationChange = async (cityValue) => {
+        setDestination(cityValue);
+        // Clean the city name to remove "India" etc. for lookup
+        const cleanCity = cityValue.split(',')[0].trim();
+
+        // Dynamically import to avoid circular dep issues if any, or just import at top if safe. 
+        // using dynamic here since api is already imported inside handleSearch, but better to use the specific helper.
+        const { getAirportByCity } = await import('../services/api');
+        const airport = getAirportByCity(cleanCity);
+
+        if (airport) {
+            setDestinationAirport(airport);
+        } else {
+            // Fallback: if no airport found, just show the city name or keep it empty? 
+            // User wants "automatically fetch nearest airport". If none, maybe likely the user hasn't finished typing or it's a minor city.
+            // Let's set it to the city name as fallback so it's not empty.
+            setDestinationAirport(cityValue);
+        }
+    };
+
     const handleSearch = async () => {
         if (!destination) {
             alert("Please select a destination");
@@ -39,7 +60,9 @@ const Dashboard = () => {
 
         try {
             const { getRealTimeFlights } = await import('../services/api');
-            const data = await getRealTimeFlights({ origin, destination });
+            // Use destinationAirport if valid, else destination
+            const searchDest = destinationAirport || destination;
+            const data = await getRealTimeFlights({ origin, destination: searchDest });
 
             if (data) {
                 setOutboundData(data.outbound);
@@ -86,7 +109,7 @@ const Dashboard = () => {
                     origin={origin}
                     setOrigin={setOrigin}
                     destination={destination}
-                    setDestination={setDestination}
+                    setDestination={handleDestinationChange}
                     travelDate={travelDate}
                     setTravelDate={setTravelDate}
                     returnDate={returnDate}
@@ -105,10 +128,14 @@ const Dashboard = () => {
 
                 <div className="flight-results-area">
                     <SearchSummary
-                        origin={origin || "Select Origin"}
-                        destination={destination || "Select Destination"}
-                        departDate={travelDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
-                        returnDate={returnDate ? returnDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : '-'}
+                        origin={origin}
+                        setOrigin={setOrigin}
+                        destination={destinationAirport}
+                        setDestination={setDestinationAirport}
+                        departDate={travelDate}
+                        setDepartDate={setTravelDate}
+                        returnDate={returnDate}
+                        setReturnDate={setReturnDate}
                     />
 
                     {selectedOutbound && selectedReturn ? (
