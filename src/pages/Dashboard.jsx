@@ -2,13 +2,13 @@ import { useState } from 'react';
 import Tabs from '../components/Tabs/Tabs';
 import Filters from '../components/Filters/Filters';
 import FlightSection from '../components/FlightSection/FlightSection';
-
 import SearchSummary from '../components/SearchSummary/SearchSummary';
-
-
+import ComingSoon from './ComingSoon';
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
+    const [activeSubTab, setActiveSubTab] = useState('with-flights');
+
     const [destination, setDestination] = useState('');
     const [destinationAirport, setDestinationAirport] = useState('');
     const [origin, setOrigin] = useState('');
@@ -30,12 +30,9 @@ const Dashboard = () => {
 
     const handleTabSwitch = (tab) => {
         setActiveTab(tab);
-        // Reset Search Inputs
         setDestination('');
         setDestinationAirport('');
         setOrigin('');
-
-        // Reset Results
         setOutboundData(null);
         setReturnData(null);
         setSelectedOutbound(null);
@@ -47,10 +44,8 @@ const Dashboard = () => {
     const handleDestinationChange = async (cityValue) => {
         setDestination(cityValue);
         const cleanCity = cityValue.split(',')[0].trim();
-
         const { getAirportByCity } = await import('../services/api');
         const airport = getAirportByCity(cleanCity);
-
         if (airport) {
             setDestinationAirport(airport);
         } else {
@@ -111,102 +106,117 @@ const Dashboard = () => {
             </div>
 
             <div className="sub-tabs">
-                <button className="sub-tab active">Package with Flights</button>
-                <button className="sub-tab">Package without Flights</button>
+                <button
+                    className={`sub-tab ${activeSubTab === 'with-flights' ? 'active' : ''}`}
+                    onClick={() => setActiveSubTab('with-flights')}
+                >
+                    Package with Flights
+                </button>
+                <button
+                    className={`sub-tab ${activeSubTab === 'without-flights' ? 'active' : ''}`}
+                    onClick={() => setActiveSubTab('without-flights')}
+                >
+                    Package without Flights
+                </button>
             </div>
 
             <div className="dashboard-content">
-                <Filters
-                    region={activeTab}
-                    origin={origin}
-                    setOrigin={setOrigin}
-                    destination={destination}
-                    setDestination={handleDestinationChange}
-                    travelDate={travelDate}
-                    setTravelDate={setTravelDate}
-                    returnDate={returnDate}
-                    setReturnDate={setReturnDate}
-                    passengers={passengers}
-                    setPassengers={setPassengers}
-                    hotelStandard={hotelStandard}
-                    setHotelStandard={setHotelStandard}
-                    addLunch={addLunch}
-                    setAddLunch={setAddLunch}
-                    addDinner={addDinner}
-                    setAddDinner={setAddDinner}
-                    onSearch={handleSearch}
-                />
+                {activeSubTab === 'with-flights' ? (
+                    <>
+                        <Filters
+                            region={activeTab}
+                            origin={origin}
+                            setOrigin={setOrigin}
+                            destination={destination}
+                            setDestination={handleDestinationChange}
+                            travelDate={travelDate}
+                            setTravelDate={setTravelDate}
+                            returnDate={returnDate}
+                            setReturnDate={setReturnDate}
+                            passengers={passengers}
+                            setPassengers={setPassengers}
+                            hotelStandard={hotelStandard}
+                            setHotelStandard={setHotelStandard}
+                            addLunch={addLunch}
+                            setAddLunch={setAddLunch}
+                            addDinner={addDinner}
+                            setAddDinner={setAddDinner}
+                            onSearch={handleSearch}
+                        />
 
+                        <div className="flight-results-area">
+                            <SearchSummary
+                                origin={origin}
+                                setOrigin={setOrigin}
+                                destination={destinationAirport}
+                                setDestination={setDestinationAirport}
+                                departDate={travelDate}
+                                setDepartDate={setTravelDate}
+                                returnDate={returnDate}
+                                setReturnDate={setReturnDate}
+                            />
 
-                <div className="flight-results-area">
-                    <SearchSummary
-                        origin={origin}
-                        setOrigin={setOrigin}
-                        destination={destinationAirport}
-                        setDestination={setDestinationAirport}
-                        departDate={travelDate}
-                        setDepartDate={setTravelDate}
-                        returnDate={returnDate}
-                        setReturnDate={setReturnDate}
-                    />
+                            {selectedOutbound && selectedReturn ? (
+                                <div className="blue-banner">
+                                    <div className="banner-col">
+                                        <span className="banner-label">Departure • {selectedOutbound.airline}</span>
+                                        <span className="banner-value">{selectedOutbound.depTime} &rarr; {selectedOutbound.arrTime}</span>
+                                    </div>
+                                    <div className="banner-divider">
+                                        <div className="price-tag">₹{selectedOutbound.fares[selectedOutboundFareIndex].price}</div>
+                                    </div>
+                                    <div className="banner-col">
+                                        <span className="banner-label">Return • {selectedReturn.airline}</span>
+                                        <span className="banner-value">{selectedReturn.depTime} &rarr; {selectedReturn.arrTime}</span>
+                                    </div>
+                                    <div className="banner-divider">
+                                        <div className="price-tag">₹{selectedReturn.fares[selectedReturnFareIndex].price}</div>
+                                    </div>
+                                    <div className="banner-col price">
+                                        <div className="total-label">for {passengers || 'passengers'}</div>
+                                        <span className="total-fare">Total Round fare <strong>₹{calculateTotal()}</strong></span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="blue-banner" style={{ justifyContent: 'center', height: 'auto', padding: '1rem' }}>
+                                    <span className="banner-value" style={{ fontSize: '1rem' }}>Select an outbound and return flight to view summary</span>
+                                </div>
+                            )}
 
-                    {selectedOutbound && selectedReturn ? (
-                        <div className="blue-banner">
-                            <div className="banner-col">
-                                <span className="banner-label">Departure • {selectedOutbound.airline}</span>
-                                <span className="banner-value">{selectedOutbound.depTime} &rarr; {selectedOutbound.arrTime}</span>
-                            </div>
-                            <div className="banner-divider">
-                                <div className="price-tag">₹{selectedOutbound.fares[selectedOutboundFareIndex].price}</div>
-                            </div>
-                            <div className="banner-col">
-                                <span className="banner-label">Return • {selectedReturn.airline}</span>
-                                <span className="banner-value">{selectedReturn.depTime} &rarr; {selectedReturn.arrTime}</span>
-                            </div>
-                            <div className="banner-divider">
-                                <div className="price-tag">₹{selectedReturn.fares[selectedReturnFareIndex].price}</div>
-                            </div>
-                            <div className="banner-col price">
-                                <div className="total-label">for {passengers || 'passengers'}</div>
-                                <span className="total-fare">Total Round fare <strong>₹{calculateTotal()}</strong></span>
+                            <div className="flights-grid">
+                                {loading && <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '2rem' }}>Loading flights...</div>}
+
+                                {!loading && outboundData && outboundData.length === 0 && (
+                                    <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '2rem', color: 'var(--text-secondary)' }}>
+                                        No flights found for this route. Try a different date or destination.
+                                    </div>
+                                )}
+
+                                {!loading && outboundData && outboundData.length > 0 && (
+                                    <FlightSection
+                                        title={`Outbound: Hyderabad(HYD) -> ${destination.split(',')[0]}`}
+                                        flights={outboundData}
+                                        selectedFlightId={selectedOutbound?.id}
+                                        selectedFareIndex={selectedOutboundFareIndex}
+                                        onSelectFlight={handleOutboundSelect}
+                                    />
+                                )}
+
+                                {!loading && returnData && returnData.length > 0 && (
+                                    <FlightSection
+                                        title={`Return: ${destination.split(',')[0]} -> Hyderabad(HYD)`}
+                                        flights={returnData}
+                                        selectedFlightId={selectedReturn?.id}
+                                        selectedFareIndex={selectedReturnFareIndex}
+                                        onSelectFlight={handleReturnSelect}
+                                    />
+                                )}
                             </div>
                         </div>
-                    ) : (
-                        <div className="blue-banner" style={{ justifyContent: 'center', height: 'auto', padding: '1rem' }}>
-                            <span className="banner-value" style={{ fontSize: '1rem' }}>Select an outbound and return flight to view summary</span>
-                        </div>
-                    )}
-
-                    <div className="flights-grid">
-                        {loading && <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '2rem' }}>Loading flights...</div>}
-
-                        {!loading && outboundData && outboundData.length === 0 && (
-                            <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '2rem', color: 'var(--text-secondary)' }}>
-                                No flights found for this route. Try a different date or destination.
-                            </div>
-                        )}
-
-                        {!loading && outboundData && outboundData.length > 0 && (
-                            <FlightSection
-                                title={`Outbound: Hyderabad(HYD) -> ${destination.split(',')[0]}`}
-                                flights={outboundData}
-                                selectedFlightId={selectedOutbound?.id}
-                                selectedFareIndex={selectedOutboundFareIndex}
-                                onSelectFlight={handleOutboundSelect}
-                            />
-                        )}
-
-                        {!loading && returnData && returnData.length > 0 && (
-                            <FlightSection
-                                title={`Return: ${destination.split(',')[0]} -> Hyderabad(HYD)`}
-                                flights={returnData}
-                                selectedFlightId={selectedReturn?.id}
-                                selectedFareIndex={selectedReturnFareIndex}
-                                onSelectFlight={handleReturnSelect}
-                            />
-                        )}
-                    </div>
-                </div>
+                    </>
+                ) : (
+                    <ComingSoon />
+                )}
             </div>
         </div>
     );

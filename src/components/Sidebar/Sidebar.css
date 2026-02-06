@@ -98,9 +98,56 @@
 }
 
 .nav-item.active {
-    background-color: #f0f9ff;
-    color: #0284c7;
+    background-color: transparent;
+    color: #4f46e5;
+    /* Violet color for active/lead parent */
     font-weight: 500;
+}
+
+/* Dashboard specific hover */
+.dashboard-item:hover {
+    color: #7c3aed;
+    /* Violet hover */
+    background-color: transparent;
+}
+
+.dashboard-item:hover .icon {
+    color: #7c3aed;
+}
+
+/* Sub-menu styling */
+.nav-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.parent-item {
+    justify-content: space-between;
+}
+
+.chevron-down {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-left: auto;
+}
+
+.sub-menu {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1.5rem;
+    /* Indentation */
+}
+
+.sub-item {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color: #4f46e5;
+    /* Matching the Leads text color */
+}
+
+.sub-item .icon {
+    width: 0.9rem;
+    height: 0.9rem;
 }
 
 .nav-item .icon {

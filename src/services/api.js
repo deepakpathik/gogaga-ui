@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-const CSC_API_KEY = "49cc754546f618f6deeee076217c3c94af7e660a6de196b5326b5dda822627b5";
+const CSC_API_KEY = import.meta.env.VITE_CSC_API_KEY;
 
 const cityClient = axios.create({
-    baseURL: 'https://api.countrystatecity.in/v1',
+    baseURL: import.meta.env.VITE_CSC_API_URL,
     headers: {
         'X-CSCAPI-KEY': CSC_API_KEY
     }
 });
 
 const teleportClient = axios.create({
-    baseURL: 'https://api.teleport.org/api'
+    baseURL: import.meta.env.VITE_TELEPORT_API_URL
 });
 
 const AIRPORTS = [
@@ -114,7 +114,8 @@ export const searchAirportsByCity = async (query, region) => {
 
     try {
         const searchResponse = await teleportClient.get('/cities/', {
-            params: { search: query }
+            params: { search: query },
+            timeout: 1000
         });
 
         const searchResults = searchResponse.data._embedded['city:search-results'];
@@ -159,7 +160,7 @@ export const searchAirportsByCity = async (query, region) => {
         }));
 
     } catch (error) {
-        console.error("Teleport API error:", error);
+        console.warn("Teleport API unreachable, using local data.");
         return searchAirports(query, region);
     }
 };
