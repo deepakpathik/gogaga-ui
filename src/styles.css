@@ -259,7 +259,7 @@ ul {
 .sub-tabs {
     display: flex;
     gap: 2rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
     border-bottom: 1px solid var(--border);
     padding-bottom: 0px;
 }
@@ -296,15 +296,14 @@ ul {
 .flight-results-area {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding-top: 1rem;
+    gap: 0.5rem;
+    padding-top: 0.25rem;
 }
 
 .blue-banner {
     background-color: #1e3a8a;
-
     color: white;
-    border-radius: var(--radius);
+    border-radius: 8px;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
