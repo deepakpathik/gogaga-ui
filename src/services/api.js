@@ -9,12 +9,10 @@ const cityClient = axios.create({
     }
 });
 
-// Teleport API doesn't require an API key
 const teleportClient = axios.create({
     baseURL: 'https://api.teleport.org/api'
 });
 
-// Hardcoded list of major airports with approximate coordinates
 const AIRPORTS = [
     { name: "Indira Gandhi International Airport", iata: "DEL", city: "New Delhi", country: "India", lat: 28.5562, lon: 77.1000 },
     { name: "Chhatrapati Shivaji Maharaj International Airport", iata: "BOM", city: "Mumbai", country: "India", lat: 19.0896, lon: 72.8656 },
@@ -38,9 +36,8 @@ const AIRPORTS = [
     { name: "Hong Kong International Airport", iata: "HKG", city: "Hong Kong", country: "Hong Kong", lat: 22.3080, lon: 113.9185 }
 ];
 
-// Calculate distance between two coordinates in km using Haversine formula
 const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the earth in km
+    const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
     const a =
@@ -48,7 +45,7 @@ const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
         Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in km
+    return R * c;
 };
 
 const deg2rad = (deg) => {
@@ -78,40 +75,44 @@ export const searchCities = async (query) => {
     }
 };
 
-export const searchAirports = async (query) => {
+export const searchAirports = async (query, region) => {
     if (!query) return [];
 
     return new Promise((resolve) => {
-        // Simulate a small network delay for realism
-        setTimeout(() => {
-            const lowerQuery = query.toLowerCase();
-            const filtered = AIRPORTS.filter(airport =>
-                airport.name.toLowerCase().includes(lowerQuery) ||
-                airport.city.toLowerCase().includes(lowerQuery) ||
-                airport.iata.toLowerCase().includes(lowerQuery)
-            );
+        const lowerQuery = query.toLowerCase();
+        let filtered = AIRPORTS;
 
-            const results = filtered.map(airport => ({
-                label: `${airport.city} (${airport.iata})`, // Format: City (IATA)
-                value: airport.iata,
-                name: airport.name,
-                city: airport.city,
-                country: airport.country,
-                type: 'airport'
-            }));
+        if (region === 'indian') {
+            filtered = filtered.filter(a => a.country === 'India');
+        } else if (region === 'international') {
+            filtered = filtered.filter(a => a.country !== 'India');
+        }
 
-            resolve(results);
-        }, 300);
+        filtered = filtered.filter(airport =>
+            airport.name.toLowerCase().includes(lowerQuery) ||
+            airport.city.toLowerCase().includes(lowerQuery) ||
+            airport.iata.toLowerCase().includes(lowerQuery)
+        );
+
+        const results = filtered.map(airport => ({
+            label: `${airport.city} (${airport.iata})`,
+            value: airport.iata,
+            name: airport.name,
+            city: airport.city,
+            country: airport.country,
+            type: 'airport'
+        }));
+
+        resolve(results);
     });
 };
 
-/* New Functionality: Search Airports by City via Teleport API */
 
-export const searchAirportsByCity = async (query) => {
+
+export const searchAirportsByCity = async (query, region) => {
     if (!query || query.length < 2) return [];
 
     try {
-        // 1. Search for city using Teleport API
         const searchResponse = await teleportClient.get('/cities/', {
             params: { search: query }
         });
@@ -122,30 +123,32 @@ export const searchAirportsByCity = async (query) => {
             return [];
         }
 
-        // 2. Get details for the top result to find coordinates
-        // Using the first match is usually safe for autocomplete
         const topMatchUrl = searchResults[0]._links['city:item'].href;
 
         const cityDetailsResponse = await axios.get(topMatchUrl);
         const location = cityDetailsResponse.data.location.latlon;
         const cityName = cityDetailsResponse.data.name;
-        const country = cityDetailsResponse.data._links['city:country']?.name || 'Unknown Country'; // Teleport structure might vary, but let's try this
+        const country = cityDetailsResponse.data._links['city:country']?.name || 'Unknown Country';
 
-        // 3. Find nearest airports from our dataset
-        const nearbyAirports = AIRPORTS.map(airport => {
-            return {
-                ...airport,
-                distance: getDistanceFromLatLonInKm(location.latitude, location.longitude, airport.lat, airport.lon)
-            };
-        })
-            .filter(airport => airport.distance < 300) // Filter airports within 300km
+        const nearbyAirports = AIRPORTS
+            .filter(airport => {
+                if (region === 'indian') return airport.country === 'India';
+                if (region === 'international') return airport.country !== 'India';
+                return true;
+            })
+            .map(airport => {
+                return {
+                    ...airport,
+                    distance: getDistanceFromLatLonInKm(location.latitude, location.longitude, airport.lat, airport.lon)
+                };
+            })
+            .filter(airport => airport.distance < 300)
             .sort((a, b) => a.distance - b.distance)
-            .slice(0, 5); // Take top 5
+            .slice(0, 5);
 
-        // Map to dropdown format
         return nearbyAirports.map(airport => ({
             label: `${airport.name} (${airport.iata})`,
-            subLabel: `${airport.city}, ${airport.country}`, // Detail for the UI
+            subLabel: `${airport.city}, ${airport.country}`,
             value: airport.iata,
             iata: airport.iata,
             name: airport.name,
@@ -157,8 +160,7 @@ export const searchAirportsByCity = async (query) => {
 
     } catch (error) {
         console.error("Teleport API error:", error);
-        // Fallback to basic string matching if API fails
-        return searchAirports(query);
+        return searchAirports(query, region);
     }
 };
 
@@ -219,21 +221,18 @@ export const getRealTimeFlights = async ({ origin, destination }) => {
                 outbound: generateFlights(5 + Math.floor(Math.random() * 3), 'out'),
                 return: generateFlights(5 + Math.floor(Math.random() * 3), 'ret')
             });
-        }, 800);
+        }, 200);
     });
 };
 
-// Helper to find airport by city name
 export const getAirportByCity = (cityName) => {
     if (!cityName) return null;
     let lowerCity = cityName.toLowerCase().trim();
 
-    // 1. Clean the input (remove ", India" etc.)
     if (lowerCity.includes(',')) {
         lowerCity = lowerCity.split(',')[0].trim();
     }
 
-    // 2. Handle common city aliases
     const aliases = {
         'bangalore': 'bengaluru',
         'bombay': 'mumbai',
@@ -249,7 +248,6 @@ export const getAirportByCity = (cityName) => {
         lowerCity = aliases[lowerCity];
     }
 
-    // 3. Find airport
     const airport = AIRPORTS.find(a => a.city.toLowerCase() === lowerCity);
 
     if (airport) {

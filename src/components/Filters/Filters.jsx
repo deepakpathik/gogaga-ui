@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { searchAirportsByCity } from '../../services/api'; // Updated import
+import { searchAirportsByCity } from '../../services/api';
 import './Filters.css';
 
 const Filters = ({
@@ -16,7 +16,7 @@ const Filters = ({
     region
 }) => {
     const [showDropdown, setShowDropdown] = useState(false);
-    const [filteredAirports, setFilteredAirports] = useState([]); // Renamed from filteredCities
+    const [filteredAirports, setFilteredAirports] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const dropdownRef = useRef(null);
@@ -42,11 +42,11 @@ const Filters = ({
 
         if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
-        if (value.length >= 2) { // Start searching after 2 chars
+        if (value.length >= 2) {
             setIsLoading(true);
             debounceTimeout.current = setTimeout(async () => {
                 try {
-                    const results = await searchAirportsByCity(value);
+                    const results = await searchAirportsByCity(value, region);
                     setFilteredAirports(results);
                 } catch (err) {
                     console.error("Airport search error", err);
@@ -54,7 +54,7 @@ const Filters = ({
                 } finally {
                     setIsLoading(false);
                 }
-            }, 600); // 600ms debounce
+            }, 300);
         } else {
             setFilteredAirports([]);
             setIsLoading(false);
@@ -62,11 +62,6 @@ const Filters = ({
     };
 
     const selectAirport = (airportData) => {
-        // format: "City (IATA)" or just "IATA" depending on preference, 
-        // but prompt says "store IATA code". 
-        // User visual might need to be friendly.
-        // Let's store "City (IATA)" in the input for readability, but internally it's the IATA.
-        // Since `destination` is a string state passed from parent, we update that.
         setDestination(airportData.label);
         setShowDropdown(false);
     };

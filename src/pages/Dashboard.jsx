@@ -10,10 +10,10 @@ import SearchSummary from '../components/SearchSummary/SearchSummary';
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('indian');
     const [destination, setDestination] = useState('');
-    const [destinationAirport, setDestinationAirport] = useState(''); // Synced airport for SearchSummary
-    const [origin, setOrigin] = useState(''); // Default origin
+    const [destinationAirport, setDestinationAirport] = useState('');
+    const [origin, setOrigin] = useState('');
     const [travelDate, setTravelDate] = useState(new Date());
-    const [returnDate, setReturnDate] = useState(new Date(new Date().setDate(new Date().getDate() + 5))); // Default return +5 days
+    const [returnDate, setReturnDate] = useState(new Date(new Date().setDate(new Date().getDate() + 5)));
     const [passengers, setPassengers] = useState('');
     const [hotelStandard, setHotelStandard] = useState(5);
     const [addLunch, setAddLunch] = useState(true);
@@ -28,22 +28,32 @@ const Dashboard = () => {
     const [selectedOutboundFareIndex, setSelectedOutboundFareIndex] = useState(0);
     const [selectedReturnFareIndex, setSelectedReturnFareIndex] = useState(0);
 
+    const handleTabSwitch = (tab) => {
+        setActiveTab(tab);
+        // Reset Search Inputs
+        setDestination('');
+        setDestinationAirport('');
+        setOrigin('');
+
+        // Reset Results
+        setOutboundData(null);
+        setReturnData(null);
+        setSelectedOutbound(null);
+        setSelectedReturn(null);
+        setSelectedOutboundFareIndex(0);
+        setSelectedReturnFareIndex(0);
+    };
+
     const handleDestinationChange = async (cityValue) => {
         setDestination(cityValue);
-        // Clean the city name to remove "India" etc. for lookup
         const cleanCity = cityValue.split(',')[0].trim();
 
-        // Dynamically import to avoid circular dep issues if any, or just import at top if safe. 
-        // using dynamic here since api is already imported inside handleSearch, but better to use the specific helper.
         const { getAirportByCity } = await import('../services/api');
         const airport = getAirportByCity(cleanCity);
 
         if (airport) {
             setDestinationAirport(airport);
         } else {
-            // Fallback: if no airport found, just show the city name or keep it empty? 
-            // User wants "automatically fetch nearest airport". If none, maybe likely the user hasn't finished typing or it's a minor city.
-            // Let's set it to the city name as fallback so it's not empty.
             setDestinationAirport(cityValue);
         }
     };
@@ -53,14 +63,16 @@ const Dashboard = () => {
             alert("Please select a destination");
             return;
         }
+        if (!origin) {
+            alert("Please select a starting point (From)");
+            return;
+        }
         setLoading(true);
-        // Reset selections
         setSelectedOutbound(null);
         setSelectedReturn(null);
 
         try {
             const { getRealTimeFlights } = await import('../services/api');
-            // Use destinationAirport if valid, else destination
             const searchDest = destinationAirport || destination;
             const data = await getRealTimeFlights({ origin, destination: searchDest });
 
@@ -95,7 +107,7 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <div className="dashboard-header-row">
-                <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
+                <Tabs activeTab={activeTab} onTabChange={handleTabSwitch} />
             </div>
 
             <div className="sub-tabs">
