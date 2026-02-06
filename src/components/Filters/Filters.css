@@ -328,3 +328,56 @@
         gap: 1rem;
     }
 }
+
+@media (max-width: 480px) {
+    .filters-section {
+        gap: 0.75rem;
+    }
+
+    .search-row {
+        gap: 0.75rem;
+    }
+
+    .input-group {
+        height: 50px;
+        padding: 0.4rem 0.75rem;
+    }
+
+    .input-group label {
+        font-size: 0.7rem;
+    }
+
+    .input-group input.text-input,
+    .input-group .date-input,
+    .input-group .passenger-input {
+        font-size: 0.85rem;
+    }
+
+    .search-btn-black {
+        height: 44px;
+        width: 100%;
+    }
+
+    .hotel-options-row {
+        gap: 1rem;
+        margin-top: 0.25rem;
+    }
+
+    .option-group .label {
+        font-size: 0.8rem;
+    }
+
+    .star-btn {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+
+    .sub-tabs {
+        gap: 1rem;
+    }
+
+    .sub-tab {
+        font-size: 0.9rem;
+        padding-bottom: 0.5rem;
+    }
+}

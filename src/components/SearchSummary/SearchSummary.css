@@ -106,3 +106,56 @@
 .summary-date-wrapper {
     width: 100%;
 }
+
+@media (max-width: 768px) {
+    .search-summary-container {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .summary-group {
+        width: 100%;
+        flex: none;
+    }
+
+    .summary-group.to,
+    .summary-group.date {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 0.75rem;
+    }
+
+    .summary-group.from {
+        padding-right: 0;
+    }
+
+    .exchange-icon {
+        margin: 0.5rem 0;
+        align-self: center;
+    }
+
+    .summary-group .airport {
+        max-width: 100%;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-summary-container {
+        padding: 0.75rem;
+    }
+
+    .summary-group .label {
+        font-size: 0.65rem;
+    }
+
+    .summary-group .airport {
+        font-size: 0.8rem;
+    }
+
+    .date-val {
+        font-size: 0.8rem;
+    }
+}

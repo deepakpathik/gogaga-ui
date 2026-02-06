@@ -234,13 +234,13 @@
 @media (max-width: 768px) {
     .flight-card {
         min-height: auto;
-        gap: 1rem;
+        gap: 0.75rem;
+        padding: 0.75rem;
     }
 
     .flight-main-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 
     .airline-info {
@@ -270,7 +270,8 @@
         flex-wrap: wrap;
         height: auto;
         overflow-x: visible;
-        gap: 0.75rem;
+        gap: 0.5rem;
+        min-height: auto;
     }
 
     .badge-group {
@@ -281,5 +282,35 @@
     .flight-footer-row {
         flex-wrap: wrap;
         gap: 1rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .flight-card {
+        padding: 0.75rem;
+    }
+
+    .airline-info {
+        min-width: 140px;
+    }
+
+    .flight-time-group .time {
+        font-size: 0.9rem;
+    }
+
+    .airline-name {
+        font-size: 0.85rem;
+    }
+
+    .badge-group {
+        padding: 0.3rem 0.4rem;
+    }
+
+    .badge-group .price {
+        font-size: 0.8rem;
+    }
+
+    .footer-item {
+        font-size: 0.65rem;
     }
 }
