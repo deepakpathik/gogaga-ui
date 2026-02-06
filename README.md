@@ -36,6 +36,8 @@ VITE_TELEPORT_API_URL=https://api.teleport.org/api
 - React Router
 - React DatePicker
 - Axios
+- HTML
+- CSS
 
 ## Features
 
